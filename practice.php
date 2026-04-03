@@ -16,8 +16,8 @@ echo describeUser("Ada", null);
 function summarizeOrders(array $orders): array{
 	$sum = 0;
 	$count = 0;
-	for( $index = 0; $index < count($orders); $index++ ){
-		$sum += $orders[$index]["price"];
+	foreach ($orders as $order){
+		$sum += $order["price"];
 		$count++;
 	}
 	$output = ["total" => $sum, "count" => $count];
@@ -32,3 +32,21 @@ $orders = [
 
 $result = summarizeOrders($orders);
 echo "Total: {$result["total"]} Count: {$result["count"]} \n";
+
+
+function applydiscount(array $orders, $discountfn): array {
+	return array_map($discountfn, $orders);;
+	}
+$discountrate = 10 / 100;
+		
+
+$discountfn = fn(array $order) => [
+	"item" => $order["item"],
+	"price" => round(($order["price"]) - ($order["price"] * $dicountrate), 2)
+	];
+	
+$answer = applydiscount($orders, $discountfn);
+
+foreach ($answer as $order) {
+	echo "{$order["item"]}: {$order["price"]} \n";
+	}
