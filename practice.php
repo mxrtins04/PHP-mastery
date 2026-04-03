@@ -42,7 +42,7 @@ $discountrate = 10 / 100;
 
 $discountfn = fn(array $order) => [
 	"item" => $order["item"],
-	"price" => round(($order["price"]) - ($order["price"] * $dicountrate), 2)
+	"price" => round(($order["price"]) - ($order["price"] * $discountrate), 2)
 	];
 	
 $answer = applydiscount($orders, $discountfn);
