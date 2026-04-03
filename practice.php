@@ -50,3 +50,34 @@ $answer = applydiscount($orders, $discountfn);
 foreach ($answer as $order) {
 	echo "{$order["item"]}: {$order["price"]} \n";
 	}
+	
+interface paymentGateway{
+	function charge(float $amount): bool;
+	function getProviderName(): string;
+	}
+	
+abstract class BaseGateway implements paymentGateway{
+	private string $providerName;
+	
+	function getProviderName(): string{
+		return $this->providerName;
+		}
+	function charge(float $amount): bool{
+		return true;
+	}
+	
+	function logCharge(float $amount): void{
+		$name = $this->getProviderName();
+		echo "$name: charged $amount";
+	}
+}
+
+class StripeGateway extends BaseGateway{
+	private string $providerName = "StripeGateway";
+	public function __construct(
+		private string $apiKey
+		)
+}
+
+$gateway = new StripeGateway("34543");
+$gateway->logCharge(99.99);
