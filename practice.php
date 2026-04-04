@@ -57,7 +57,7 @@ interface paymentGateway{
 	}
 	
 abstract class BaseGateway implements paymentGateway{
-	private string $providerName;
+	protected string $providerName;
 	
 	function getProviderName(): string{
 		return $this->providerName;
@@ -68,16 +68,64 @@ abstract class BaseGateway implements paymentGateway{
 	
 	function logCharge(float $amount): void{
 		$name = $this->getProviderName();
-		echo "$name: charged $amount";
+		echo "$name: charged $amount \n";
 	}
 }
 
 class StripeGateway extends BaseGateway{
-	private string $providerName = "StripeGateway";
 	public function __construct(
 		private string $apiKey
-		)
+		) {
+		$this->providerName = "Stripe";
+		}
 }
 
 $gateway = new StripeGateway("34543");
 $gateway->logCharge(99.99);
+
+trait Loggable {
+	function log(string $message): void{
+		echo "[LOG]: $message\n";
+	}
+		}
+class PaymentService{
+	use Loggable;
+	function processPayment(float $amount): void{
+		$this->log("Processing payment of $amount");
+		}
+}
+
+$answer = new PaymentService;
+$answer-> processPayment(150.00);
+
+
+class InvalidOrderException extends RuntimeException{
+	public function __construct(string $message, int $code = 0, ?\Throwable $previous = null)
+	{
+	parent::__construct($message, $code, $previous);}
+	
+}
+	
+	
+class OrderProcessor{
+	function process(array $order): string{
+	if (!isset($order["amount"]))
+		throw new InvalidOrderException("Order must have an amount");
+		
+	if ($order["amount"] <= 0)
+		throw new InvalidOrderException("Amount must be positive"); 
+	else return "Order processed for {$order["amount"]}";
+	
+$processPayment = new OrderProcessor();
+try{
+	echo $processPayment->process($order);
+	}catch(InvalidOrderException $e){
+		e->getMessage();
+		}
+}
+
+//$processor = new OrderProcessor();
+		
+echo $processPayment->process([]);                    
+echo $processPayment->process(["amount" => -10]);     
+echo $processPayment->process(["amount" => 150.00]);
