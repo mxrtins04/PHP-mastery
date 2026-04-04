@@ -114,18 +114,36 @@ class OrderProcessor{
 		
 	if ($order["amount"] <= 0)
 		throw new InvalidOrderException("Amount must be positive"); 
-	else return "Order processed for {$order["amount"]}";
+	else return "Order processed for {$order['amount']}";
+}
+}
 	
 $processPayment = new OrderProcessor();
 try{
-	echo $processPayment->process($order);
+	 $processPayment->process($order);
 	}catch(InvalidOrderException $e){
-		e->getMessage();
+		echo $e->getMessage();
 		}
-}
 
-//$processor = new OrderProcessor();
-		
-echo $processPayment->process([]);                    
-echo $processPayment->process(["amount" => -10]);     
-echo $processPayment->process(["amount" => 150.00]);
+
+
+try{
+	echo $processPayment->process([]);
+	}catch(InvalidOrderException $e){
+		echo $e->getMessage();
+	}
+
+
+try{
+	echo $processPayment->process( ["amount" => -10]);
+	}catch(InvalidOrderException $e){
+		echo $e->getMessage();
+		}
+
+
+try{
+	echo $processPayment->process( ["amount" => 150.00]);
+	}catch(InvalidOrderException $e){
+		echo $e->getMessage();
+		}
+
