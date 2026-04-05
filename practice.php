@@ -117,15 +117,6 @@ class OrderProcessor{
 	else return "Order processed for {$order['amount']}";
 }
 }
-	
-$processPayment = new OrderProcessor();
-try{
-	 $processPayment->process($order);
-	}catch(InvalidOrderException $e){
-		echo $e->getMessage();
-		}
-
-
 
 try{
 	echo $processPayment->process([]);
